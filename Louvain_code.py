@@ -3,7 +3,7 @@ import networkx as nx
 import matplotlib.pyplot as plt
 import community as community_louvain
 
-df = pd.read_csv(r"C:\Users\tiggr\Downloads\data_dip.csv")
+df = pd.read_csv(r"db_dip.csv")
 
 G1 = nx.DiGraph()
 G2 = nx.DiGraph()
