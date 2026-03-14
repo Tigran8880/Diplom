@@ -9,7 +9,7 @@ G1 = nx.DiGraph()
 G2 = nx.DiGraph()
 G3 = nx.Graph()
 G4 = nx.Graph()
-
+G5 = nx.Graph()
 
 for index, row in df.iterrows():
 
@@ -51,6 +51,20 @@ for index, row in df.iterrows():
             G3.add_edge(user_id, friend)
             G4.add_edge(user_id, friend, weight=w)
 
+
+    if not pd.isna(row["adamic_adar"]):
+
+        adars = str(row["adamic_adar"]).split(",")
+
+        for adar in adars:
+
+            adar = adar.strip()
+            if adar == "":
+                continue
+
+            adar = int(adar)
+
+            G5.add_edge(user_id, adar)
 
 partition1 = community_louvain.best_partition(G1.to_undirected())
 partition2 = community_louvain.best_partition(G2.to_undirected(), weight="weight")
@@ -98,3 +112,10 @@ show_graph(G1, partition1, "Ուղղորդված")
 show_graph(G2, partition2, "Ուղղորդված քաշով")
 show_graph(G3, partition3, "Ոչ ուղղորդված")
 show_graph(G4, partition4, "Ոչ ուղղորդված քաշով")
+aa_scores = list(nx.adamic_adar_index(G5))
+
+aa_df = pd.DataFrame(aa_scores, columns=["Օգտատիրոջ id", "Ընկերոջ id", "Գործակից"])
+
+print("\nAdamic-Adar ինդեքս:\n")
+pd.set_option("display.max_rows", None)
+print(aa_df.sort_values(by="Գործակից", ascending=False).head(100))
